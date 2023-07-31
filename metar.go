@@ -1,13 +1,19 @@
-// metar is a go program to fetch the aviation METAR's and TAF's for a given list of airports in console (terminal) mode.
+// metar is a go program to retrieve aviation METAR's and TAF's for a given list of airports in console (terminal) mode.
 
 // Usage:
 // Retrieve messages for a list of stations (IATA or ICAO codes):
-// 		$ metar lhr jfk bru uudd
+//
+//	$ metar lhr jfk bru uudd
+//
 // Find the IATA/ICAO airport code for an airport
-// 		$ metar -s munich
-// 		$ metar -s new york
+//
+//	$ metar -s munich
+//	$ metar -s new york
+//
 // Help screen for other options:
-// 		$ metar -h
+//
+//	$ metar -h
+//
 // Bug reports:
 // https://github.com/esperlu/metar/issues
 package main
@@ -34,7 +40,7 @@ const (
 	urlTAFfmt   = URLfmt + "&hoursBeforeNow=%.1f&mostRecentForEachStation=true&Fields=raw_text"
 	maxNbMETAR  = 70
 	maxTIMEOUT  = 10
-	ver         = "2.4.4"
+	ver         = "2.4.5.1"
 )
 
 // Initialize and parse flags
@@ -151,14 +157,14 @@ func main() {
 	// search option -s
 	if *searchFlag {
 		fmt.Printf("\n%s\n", searchAirport(icao2airportInfos, strings.Join(flag.Args(), " ")))
-		fmt.Printf("  Processed in %.3f ms.\n\n", time.Since(startTotal).Seconds()*1000)
+		fmt.Printf("  Processed in %.1f ms.\n\n", time.Since(startTotal).Seconds()*1000)
 		return
 	}
 
 	// List country ISO codes
 	if *listCountriesFlag {
 		fmt.Printf("\n%s\n", listCountries(strings.Join(flag.Args(), " ")))
-		fmt.Printf("  Processed in %.3f ms.\n\n", time.Since(startTotal).Seconds()*1000)
+		fmt.Printf("  Processed in %.1f ms.\n\n", time.Since(startTotal).Seconds()*1000)
 		return
 	}
 
@@ -174,7 +180,7 @@ func main() {
 			return
 		}
 		fmt.Printf("\n%s\n", listAirports(flag.Args(), code2country))
-		fmt.Printf("  Processed in %.3f ms.\n\n", time.Since(startTotal).Seconds()*1000)
+		fmt.Printf("  Processed in %.1f ms.\n\n", time.Since(startTotal).Seconds()*1000)
 		return
 	}
 
@@ -182,7 +188,7 @@ func main() {
 	var stations []string
 	for _, v := range flag.Args() {
 		v = strings.ToUpper(v)
-		fmtNotFound := "\n  \"%s\" not found. Try to run: metar -s %[1]s\n"
+		fmtNotFound := "\n  \"%s\" not a METAR station. Try to run: metar -s %[1]s\n"
 
 		switch len(v) {
 		// if IATA airport code (3 char.), lookup the iata2icao map
